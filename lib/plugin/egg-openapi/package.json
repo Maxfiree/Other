@@ -1,0 +1,11 @@
+{
+  "name": "egg-openapi",
+  "version": "1.0.0",
+  "description": "openapi parse tool.",
+  "eggPlugin": {
+    "name": "openapi"
+  },
+  "dependencies": {
+    "js-yaml": "^3.10.0"
+  }
+}

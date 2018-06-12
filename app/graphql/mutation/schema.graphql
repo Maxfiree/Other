@@ -1,0 +1,37 @@
+type Mutation {
+  # User
+  updateUser (  
+    id: ID!,
+    name: String!,
+    phone: String,
+    email: String,
+    idCard: String!,
+    address: String,
+    headImgURL: String,
+    gender: Int,
+    age: Int,
+    status: Int!,
+    extend: String): User
+  addUserRole (
+    userId: ID!,
+    roleId: ID!
+  ): User
+  
+  # Role
+  createRole (
+    name: String!,
+    headImgURL: String,
+    description: String,
+    subscription: String,
+    status: Int!,
+    extend: String): Role
+      # Role
+  updateRole (
+    id: ID!,
+    name: String!,
+    headImgURL: String,
+    description: String,
+    subscription: String,
+    status: Int!,
+    extend: String): Role
+}

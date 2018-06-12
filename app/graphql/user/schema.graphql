@@ -1,0 +1,14 @@
+type User {
+  id: ID!
+  name: String!
+  phone: String
+  email: String
+  idCard: String!
+  address: String
+  headImgURL: String
+  gender: Int
+  age: Int
+  status: Int!
+  extend: String
+  roles: [Role] 
+}

@@ -1,0 +1,1437 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: wiredpay service
+  contact:
+    name: relzhong
+    url: http://www.wiredmed.com
+    email: relzhong@wiredmed.com
+  description: boilerplate of wiredmed.
+
+servers:
+- url: https://{name}.wiredmed.com:{port}/{basePath}
+  description: The production API server
+  variables:
+    name:
+      default: api
+    port:
+      enum:
+        - '80'
+        - '443'
+      default: '80'
+    basePath:
+      default: v1
+- url: https://easy-mock.com/mock/5aebda90d6bbb07214b7aff9/wiredpay
+  description: mockpath
+
+security:
+  - APIKeyQueryParam: []
+
+paths:
+  /hau/patients:
+    get:
+      tags:
+        - HAU Patient
+      summary: get all Patient
+      parameters:
+        - in: query
+          name: currentPage
+          schema:
+            type: integer
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    description: result code.
+                  data:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                      rows:
+                        type: array
+                        items:
+                          allOf:
+                          - $ref: '#/components/schemas/HAUPatient'
+                          - properties:
+                              id:
+                                type: integer
+    post:
+      tags:
+        - HAU Patient
+      summary: create a user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/HAUPatient'
+              - properties:
+                  password:
+                    type: string
+                    maxLength: 64        
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    description: result code.
+                  data:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                      rows:
+                        type: array
+                        items:
+                          allOf:
+                          - $ref: '#/components/schemas/HAUPatient'
+                          - properties:
+                              id:
+                                type: integer
+    
+  /hau/patients/{id}:
+    get:
+      tags:
+        - HAU Patient
+      summary: get patient by id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    description: result code.
+                  data:
+                    type: object
+                    allOf:
+                    - $ref: '#/components/schemas/HAUPatient'
+                    - properties:
+                        id:
+                          type: integer
+    put:
+      tags:
+        - HAU Patient
+      summary: update a patient
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/HAUPatient'
+              - properties:
+                  password:
+                    type: string
+                    maxLength: 64        
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    description: result code.
+                  data:
+                    type: object
+                    allOf:
+                    - $ref: '#/components/schemas/HAUPatient'
+                    - properties:
+                        id:
+                          type: integer                  
+    delete:
+      tags:
+        - HAU Patient
+      summary: delete a patient
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string   
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    description: result code.
+ 
+  /hau/patients/{id}/account:
+    get:
+      tags:
+        - HAU Patient
+      summary: get account by id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    description: result code.
+                  data:
+                    type: object
+                    allOf:
+                    - $ref: '#/components/schemas/HAUAccount'
+                    - properties:
+                        id:
+                          type: integer
+
+    delete:
+      tags:
+        - HAU Patient
+      summary: remove a account
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string   
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    description: result code.
+
+  /hau/patients/{id}/account/{accountId}:
+    put:
+      tags:
+        - HAU Patient
+      summary: associate a account
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string   
+        - in: path
+          name: accountId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    description: result code.
+
+  /hau/patientGroups:
+    get:
+      tags:
+        - HAU PatientGroup
+      summary: get all patientGroup
+      parameters:
+        - in: query
+          name: currentPage
+          schema:
+            type: integer
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    description: result code.
+                  data:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                      rows:
+                        type: array
+                        items:
+                          allOf:
+                          - $ref: '#/components/schemas/HAUPatientGroup'
+                          - properties:
+                              id:
+                                type: integer
+    post:
+      tags:
+        - HAU PatientGroup
+      summary: create a patientGroup
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HAUPatientGroup'     
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    description: result code.
+                  data:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                      rows:
+                        type: array
+                        items:
+                          allOf:
+                          - $ref: '#/components/schemas/HAUPatientGroup'
+                          - properties:
+                              id:
+                                type: integer
+    
+  /hau/patientGroups/{id}:
+    get:
+      tags:
+        - HAU PatientGroup
+      summary: get patientGroup by id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    description: result code.
+                  data:
+                    type: object
+                    allOf:
+                    - $ref: '#/components/schemas/HAUPatientGroup'
+                    - properties:
+                        id:
+                          type: integer
+    put:
+      tags:
+        - HAU PatientGroup
+      summary: update a patientGroup
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HAUPatientGroup'      
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    description: result code.
+                  data:
+                    type: object
+                    allOf:
+                    - $ref: '#/components/schemas/HAUPatientGroup'
+                    - properties:
+                        id:
+                          type: integer               
+    delete:
+      tags:
+        - HAU PatientGroup
+      summary: delete a patientGroup
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string   
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    description: result code.  
+
+  /hau/patientGroups/{id}/patients:
+    get:
+      tags:
+        - HAU PatientGroup
+      summary: get all Patient
+      parameters:
+        - in: query
+          name: currentPage
+          schema:
+            type: integer
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    description: result code.
+                  data:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                      rows:
+                        type: array
+                        items:
+                          allOf:
+                          - $ref: '#/components/schemas/HAUPatient'
+                          - properties:
+                              id:
+                                type: integer
+    post:
+      tags:
+        - HAU PatientGroup
+      summary: create a user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/HAUPatient'
+              - properties:
+                  password:
+                    type: string
+                    maxLength: 64        
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    description: result code.
+                  data:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                      rows:
+                        type: array
+                        items:
+                          allOf:
+                          - $ref: '#/components/schemas/HAUPatient'
+                          - properties:
+                              id:
+                                type: integer
+
+  /hau/patientGroups/{id}/patients/{patientId}:
+    get:
+      tags:
+        - HAU PatientGroup
+      summary: get patient by id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: patientId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    description: result code.
+                  data:
+                    type: object
+                    allOf:
+                    - $ref: '#/components/schemas/HAUPatient'
+                    - properties:
+                        id:
+                          type: integer                 
+    delete:
+      tags:
+        - HAU PatientGroup
+      summary: delete a patient
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string 
+        - in: path
+          name: patientId
+          required: true
+          schema:
+            type: string  
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    description: result code.
+
+  /hau/patientGroups/{id}/account:
+    get:
+      tags:
+        - HAU PatientGroup
+      summary: get account by id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    description: result code.
+                  data:
+                    type: object
+                    allOf:
+                    - $ref: '#/components/schemas/HAUAccount'
+                    - properties:
+                        id:
+                          type: integer
+
+    delete:
+      tags:
+        - HAU PatientGroup
+      summary: remove a account
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string   
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    description: result code.
+
+  /hau/patientGroups/{id}/account/{accountId}:
+    put:
+      tags:
+        - HAU PatientGroup
+      summary: associate a account
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string   
+        - in: path
+          name: accountId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    description: result code.
+
+  /hau/orders:
+    get:
+      tags:
+        - HAU Order
+      summary: get all order
+      parameters:
+        - in: query
+          name: currentPage
+          schema:
+            type: integer
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    description: result code.
+                  data:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                      rows:
+                        type: array
+                        items:
+                          allOf:
+                          - $ref: '#/components/schemas/HAUOrder'
+                          - properties:
+                              id:
+                                type: integer
+    post:
+      tags:
+        - HAU Order
+      summary: create a order
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HAUOrder'     
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    description: result code.
+                  data:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                      rows:
+                        type: array
+                        items:
+                          allOf:
+                          - $ref: '#/components/schemas/HAUOrder'
+                          - properties:
+                              id:
+                                type: integer
+    
+  /hau/orders/{id}:
+    get:
+      tags:
+        - HAU Order
+      summary: get order by id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    description: result code.
+                  data:
+                    type: object
+                    allOf:
+                    - $ref: '#/components/schemas/HAUOrder'
+                    - properties:
+                        id:
+                          type: integer
+    put:
+      tags:
+        - HAU Order
+      summary: update a order
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HAUOrder'      
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    description: result code.
+                  data:
+                    type: object
+                    allOf:
+                    - $ref: '#/components/schemas/HAUOrder'
+                    - properties:
+                        id:
+                          type: integer               
+    delete:
+      tags:
+        - HAU Order
+      summary: delete a order
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string   
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    description: result code.  
+
+  /hau/refunds:
+    get:
+      tags:
+        - HAU Refund
+      summary: get all refund
+      parameters:
+        - in: query
+          name: currentPage
+          schema:
+            type: integer
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    description: result code.
+                  data:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                      rows:
+                        type: array
+                        items:
+                          allOf:
+                          - $ref: '#/components/schemas/HAURefund'
+                          - properties:
+                              id:
+                                type: integer
+    post:
+      tags:
+        - HAU Refund
+      summary: create a refund
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HAURefund'     
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    description: result code.
+                  data:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                      rows:
+                        type: array
+                        items:
+                          allOf:
+                          - $ref: '#/components/schemas/HAURefund'
+                          - properties:
+                              id:
+                                type: integer
+    
+  /hau/refunds/{id}:
+    get:
+      tags:
+        - HAU Refund
+      summary: get refund by id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    description: result code.
+                  data:
+                    type: object
+                    allOf:
+                    - $ref: '#/components/schemas/HAURefund'
+                    - properties:
+                        id:
+                          type: integer
+    put:
+      tags:
+        - HAU Refund
+      summary: update a refund
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HAURefund'      
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    description: result code.
+                  data:
+                    type: object
+                    allOf:
+                    - $ref: '#/components/schemas/HAURefund'
+                    - properties:
+                        id:
+                          type: integer               
+    delete:
+      tags:
+        - HAU Refund
+      summary: delete a refund
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string   
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    description: result code.
+
+  /hau/accounts:
+    get:
+      tags:
+        - HAU Account
+      summary: get all account
+      parameters:
+        - in: query
+          name: currentPage
+          schema:
+            type: integer
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    description: result code.
+                  data:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                      rows:
+                        type: array
+                        items:
+                          allOf:
+                          - $ref: '#/components/schemas/HAUAccount'
+                          - properties:
+                              id:
+                                type: integer
+    post:
+      tags:
+        - HAU Account
+      summary: create a account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HAUAccount'     
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    description: result code.
+                  data:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                      rows:
+                        type: array
+                        items:
+                          allOf:
+                          - $ref: '#/components/schemas/IUNotificationMessage'
+                          - properties:
+                              id:
+                                type: integer
+    
+  /hau/accounts/{id}:
+    get:
+      tags:
+        - HAU Account
+      summary: get account by id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    description: result code.
+                  data:
+                    type: object
+                    allOf:
+                    - $ref: '#/components/schemas/HAUAccount'
+                    - properties:
+                        id:
+                          type: integer
+    put:
+      tags:
+        - HAU Account
+      summary: update a notificationMessage
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HAUAccount'      
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    description: result code.
+                  data:
+                    type: object
+                    allOf:
+                    - $ref: '#/components/schemas/HAUAccount'
+                    - properties:
+                        id:
+                          type: integer               
+    delete:
+      tags:
+        - HAU Account
+      summary: delete a account
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string   
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    description: result code.    
+                                                                                                                                                                                                                 
+components:
+  schemas:
+    HAUPatient:
+      type: object
+      description: '患者'
+      properties:
+        hospitalId:
+          description: '医院代码'
+          nullable: true
+          type: string
+          maxLength: 36
+        patientGroupId:
+          description: '患者组Id'
+          nullable: true
+          type: integer
+        patientName:
+          description: '姓名'
+          nullable: false
+          type: string
+          maxLength: 36
+        phone:
+          description: '手机号码'
+          nullable: true
+          type: string
+          maxLength: 20
+        healthCardNo:
+          description: '诊疗卡号'
+          nullable: false
+          type: string
+          uniqueItems: true
+          maxLength: 36
+        medicareCardNo:
+          description: '医保卡号'
+          nullable: true
+          type: string
+          uniqueItems: false
+          maxLength: 36
+        idCard:
+          description: '身份证号'
+          nullable: true
+          type: string
+          uniqueItems: true
+          maxLength: 18
+        oppatNo:
+          description: '病案号'
+          nullable: true
+          type: string
+          uniqueItems: true
+          maxLength: 36
+        admissionNo:
+          description: '住院号'
+          nullable: true
+          type: string
+          uniqueItems: true
+          maxLength: 36
+        sex:
+          type: integer
+          description: '用户性别'
+          nullable: true
+          default: 1
+          enum:
+            - 1
+            - 2
+        type:
+          type: integer
+          description: '类型，1成人2儿童'
+          nullable: true
+          default: 1
+          enum:
+            - 1
+            - 2
+        birthday:
+          description: '生日'
+          nullable: true
+          type: string
+          maxLength: 36
+        age:
+          description: '年龄'
+          nullable: false
+          default: 0
+          type: integer
+        address:
+          description: '地址'
+          nullable: true
+          type: string
+          maxLength: 255
+        status:
+          description: '状态'
+          nullable: false
+          default: 1
+          type: integer
+          enum:
+            - 0
+            - 1
+        description:
+          description: '用户描述'
+          nullable: true
+          type: string
+          maxLength: 100
+
+    HAUPatientGroup:
+      type: object
+      description: '患者用户组'
+      properties:
+        hospitalId:
+          description: '医院代码'
+          nullable: true
+          type: string
+          maxLength: 36
+        masterId:
+          description: '主患者Id'
+          nullable: true
+          default: 0
+          type: integer
+        name:
+          description: '选项名称'
+          nullable: false
+          type: string
+          maxLength: 36
+        status:
+          description: '状态'
+          nullable: false
+          default: 1
+          type: integer
+          enum:
+            - 0
+            - 1
+        description:
+          description: '描述'
+          nullable: true
+          maxLength: 100
+          type: string
+
+    HAUAccount:
+      type: object
+      description: '预存金账户'
+      properties:
+        balance:
+          description: '余额'
+          nullable: false
+          default: 0
+          type: integer
+        type:
+          description: '类型'
+          nullable: false
+          default: 1
+          type: integer
+        status:
+          description: '状态'
+          nullable: false
+          default: 1
+          type: integer
+          enum:
+            - 0
+            - 1
+        description:
+          description: '描述'
+          nullable: true
+          maxLength: 100
+          type: string
+        patientGroupId:
+          description: '患者组Id'
+          nullable: true
+          type: integer
+        patientId:
+          description: '患者Id'
+          nullable: true
+          type: integer
+    
+    HAUOrder:
+      type: object
+      description: '预存金交易记录'
+      properties:
+        fromId:
+          description: '支出账号编号'
+          nullable: true
+          type: integer
+        toId:
+          description: '收款账号编号'
+          nullable: true
+          type: integer
+        orderId:
+          description: '订单ID'
+          nullable: false
+          type: string
+          uniqueItems: true
+          maxLength: 36
+        tradeId:
+          description: '渠道订单ID'
+          nullable: false
+          type: string
+          uniqueItems: true
+          maxLength: 36
+        type:
+          description: '类型 1充值 2消费 3转账 4退费'
+          nullable: false
+          default: 1
+          type: integer
+        price:
+          description: '交易金额'
+          nullable: false
+          type: integer 
+        operatorId:
+          description: '操作人员编号'
+          nullable: false
+          type: integer    
+        payTime:
+          description: '支付时间'
+          nullable: true
+          type: string
+          maxLength: 36
+        status:
+          description: '状态'
+          nullable: false
+          default: 1
+          type: integer
+          enum:
+            - 0
+            - 1
+        description:
+          description: '描述'
+          nullable: true
+          maxLength: 100
+          type: string
+
+    HAURefund:
+      type: object
+      description: '预存金交易记录'
+      properties:
+        fromId:
+          description: '支出账号编号'
+          nullable: false
+          type: integer
+        toId:
+          description: '收款账号编号'
+          nullable: false
+          type: integer
+        orderId:
+          description: '订单ID'
+          nullable: false
+          type: string
+          uniqueItems: true
+          maxLength: 36
+        refundId:
+          description: '退款订单ID'
+          nullable: false
+          type: string
+          uniqueItems: true
+          maxLength: 36
+        tradeId:
+          description: '渠道订单ID'
+          nullable: false
+          type: string
+          uniqueItems: true
+          maxLength: 36
+        type:
+          description: '类型'
+          nullable: false
+          default: 1
+          type: integer
+        price:
+          description: '交易金额'
+          nullable: false
+          type: integer 
+        operatorId:
+          description: '操作人员编号'
+          nullable: false
+          type: integer    
+        refundTime:
+          description: '退款时间'
+          nullable: true
+          type: string
+          maxLength: 36
+        status:
+          description: '状态'
+          nullable: false
+          default: 1
+          type: integer
+          enum:
+            - 0
+            - 1
+        description:
+          description: '描述'
+          nullable: true
+          maxLength: 100
+          type: string
+
+  securitySchemes:
+    petstore_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: http://example.org/api/oauth/dialog
+          scopes:
+            write:pets: modify pets in your account
+            read:pets: read your pets
+  responses:
+      ApiResponse:
+        description: "api response object"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: integer
+                data:
+                  type: object

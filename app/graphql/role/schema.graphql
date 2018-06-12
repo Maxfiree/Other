@@ -1,0 +1,10 @@
+type Role {
+  id: ID!
+  name: String!
+  headImgURL: String
+  description: String
+  subscription: String
+  user: [User]
+  status: Int!
+  extend: String
+}
