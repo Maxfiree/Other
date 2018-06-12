@@ -29,5 +29,9 @@ module.exports = app => {
 
   app.router.resources('departments', '/api/v1/hau/departments', app.controller.hau.departments);
   app.get('/api/v1/hau/departments/:deptId/doctors', app.controller.hau.departments.getDoctors);
+
+  app.router.resources('doctors', '/api/v1/hau/doctors', app.controller.hau.doctors);
+  app.get('/api/v1/hau/doctors/:doctorId/scheduleInfos', app.controller.hau.doctors.getScheduleInfos);
+
   // not use path /cn and /public as it server for static source by default
 };

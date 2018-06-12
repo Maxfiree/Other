@@ -18,7 +18,7 @@ module.exports = app => {
       this.success(doctorList);
     }
 
-    async scheduleInfos() {
+    async getScheduleInfos() {
       const Joi = app.Joi;
       const schema = Joi.object().keys({
         doctorId: Joi.string().required(),
