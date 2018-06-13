@@ -3,7 +3,7 @@ const createError = require('http-errors');
 module.exports = app => {
   class DepartmentController extends app.Controller {
     async index() {
-      const departmentList = await app.repository.Department.findAll(app.config.datasource.KingdeeCommon.hospitalId);
+      const departmentList = await app.repository.Department.findAll();
       this.success(departmentList);
     }
     async getDoctors() {
@@ -16,7 +16,7 @@ module.exports = app => {
         throw createError(400, VInfo.error, { code: 1001 });
       }
       const data = VInfo.value;
-      const department = await app.repository.Department.findById(app.config.datasource.KingdeeCommon.hospitalId, data.deptId);
+      const department = await app.repository.Department.findById(data.deptId);
       if (department) {
         const doctorList = await department.getRegisterDoctors();
         return this.success(doctorList);

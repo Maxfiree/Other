@@ -1,5 +1,5 @@
 /** @module repository/Department */
-const moment = require('moment');
+const moment = require('moment-timezone');
 const path = require('path');
 const fs = require('fs');
 // const R = require('ramda');
@@ -38,7 +38,8 @@ module.exports = app => {
     static getType() {
       return 'adapter';
     }
-    static async findById(hospitalId, deptId) {
+    static async findById(deptId) {
+      const hospitalId = app.config.datasource.KingdeeCommon.hospitalId;
       const res = await connector.request('getDeptInfo', { hospitalId, deptId });
       const deptList = res.deptInfo ? res.deptInfo instanceof Array ? res.deptInfo : [ res.deptInfo ] : [];
       if (deptList.length > 0) {
@@ -51,7 +52,8 @@ module.exports = app => {
       return null;
     }
 
-    static async findAll(hospitalId) {
+    static async findAll() {
+      const hospitalId = app.config.datasource.KingdeeCommon.hospitalId;
       const res = await connector.request('getDeptInfo', { hospitalId });
       const deptList = res.deptInfo ? res.deptInfo instanceof Array ? res.deptInfo : [ res.deptInfo ] : [];
       return deptList.map(dept => {
@@ -72,7 +74,7 @@ module.exports = app => {
     async getRegisterDoctors(startDate, endDate, deptType) {
       const hospitalId = this._raw.hospitalId;
       if (!startDate) {
-        startDate = moment().format('YYYY-MM-DD');
+        startDate = moment().tz('Asia/Shanghai').format('YYYY-MM-DD');
         endDate = startDate;
       }
       const res = await connector.request('getRegInfoToday', { hospitalId, deptId: this.deptId, startDate, endDate, deptType });

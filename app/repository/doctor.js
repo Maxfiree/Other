@@ -1,6 +1,6 @@
 /** @module repository/Doctor */
 
-const moment = require('moment');
+const moment = require('moment-timezone');
 const path = require('path');
 const fs = require('fs');
 const R = require('ramda');
@@ -45,7 +45,8 @@ module.exports = app => {
     static getType() {
       return 'adapter';
     }
-    static async findById(hospitalId, doctorId, deptId) {
+    static async findById(doctorId, deptId) {
+      const hospitalId = app.config.datasource.KingdeeCommon.hospitalId;
       deptId = deptId ? deptId : '';
       const res = await connector.request('getDoctorInfo', { hospitalId, doctorId, deptId });
       const doctorList = res.doctorInfo ? res.doctorInfo instanceof Array ? res.doctorInfo : [ res.doctorInfo ] : [];
@@ -67,7 +68,8 @@ module.exports = app => {
       return doctor;
     }
 
-    static async findAll(hospitalId) {
+    static async findAll() {
+      const hospitalId = app.config.datasource.KingdeeCommon.hospitalId;
       const res = await connector.request('getDoctorInfo', { hospitalId });
       const doctorList = res.doctorInfo ? res.doctorInfo instanceof Array ? res.doctorInfo : [ res.doctorInfo ] : [];
       return doctorList.map(doctor => {
@@ -89,7 +91,7 @@ module.exports = app => {
     async getScheduleInfos(startDate, endDate, deptType) {
       const hospitalId = this._raw.hospitalId;
       if (!startDate) {
-        startDate = moment().format('YYYY-MM-DD');
+        startDate = moment().tz('Asia/Shanghai').format('YYYY-MM-DD');
         endDate = startDate;
       }
       const res = await connector.request('getRegInfoToday', { hospitalId,
@@ -104,7 +106,7 @@ module.exports = app => {
         let scheduleInfoList = timeRegInfo.timeRegInfo ? timeRegInfo.timeRegInfo instanceof Array ? timeRegInfo.timeRegInfo : [ timeRegInfo.timeRegInfo ] : [];
         scheduleInfoList = R.uniq(scheduleInfoList);
         for (const scheduleInfo of scheduleInfoList) {
-          const scheduleId = this.doctorId + moment().format('YYYYMMDD') + scheduleInfo.timeFlag;
+          const scheduleId = this.doctorId + moment().tz('Asia/Shanghai').format('YYYYMMDD') + scheduleInfo.timeFlag;
           let resScheduleInfo = await app.repository.ScheduleInfo.findOne({ where: { scheduleId } });
           resScheduleIdList.push(scheduleId);
           if (resScheduleInfo) {

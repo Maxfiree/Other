@@ -1,6 +1,6 @@
 /** @module repository/Patient */
 const R = require('ramda');
-const moment = require('moment');
+const moment = require('moment-timezone');
 module.exports = app => {
   const connector = app.datasource.kingdeeCommon;
   /**
@@ -125,8 +125,8 @@ module.exports = app => {
     async getExamineReports(startDate, endDate) {
       const patient = this;
       if (!startDate) {
-        startDate = moment().subtract(10, 'day').format('YYYY-MM-DD');
-        endDate = moment().format('YYYY-MM-DD');
+        startDate = moment().subtract(10, 'day').tz('Asia/Shanghai').format('YYYY-MM-DD');
+        endDate = moment().tz('Asia/Shanghai').format('YYYY-MM-DD');
       }
       const res = await connector.request('pacs.getReport', { patientId: patient.patientId, healthCardNo: patient.healthCardNo, beginDate: startDate, endDate });
       const reportList = res.report ? res.report instanceof Array ? res.report : [ res.report ] : [];
@@ -164,8 +164,8 @@ module.exports = app => {
     async getInspectionReports(startDate, endDate) {
       const patient = this;
       if (!startDate) {
-        startDate = moment().subtract(10, 'day').format('YYYY-MM-DD');
-        endDate = moment().format('YYYY-MM-DD');
+        startDate = moment().subtract(10, 'day').tz('Asia/Shanghai').format('YYYY-MM-DD');
+        endDate = moment().tz('Asia/Shanghai').format('YYYY-MM-DD');
       }
       const res = await connector.request('lis.getReport', { patientId: patient.patientId, healthCardNo: patient.healthCardNo, beginDate: startDate, endDate });
       const reportList = res.report ? res.report instanceof Array ? res.report : [ res.report ] : [];
@@ -207,8 +207,8 @@ module.exports = app => {
     async getOutpatientFees(status, startDate, endDate) {
       const patient = this;
       if (!startDate) {
-        startDate = moment().subtract(10, 'day').format('YYYY-MM-DD');
-        endDate = moment().format('YYYY-MM-DD');
+        startDate = moment().subtract(10, 'day').tz('Asia/Shanghai').format('YYYY-MM-DD');
+        endDate = moment().tz('Asia/Shanghai').format('YYYY-MM-DD');
       }
       const outpatientFees = [];
       if (parseInt(status) === 2) {
@@ -247,7 +247,7 @@ module.exports = app => {
                 description: payListInfo.remark,
               });
             }
-            const description = '收费单: ' + (payListInfo.clinicTime ? moment(payListInfo.clinicTime, 'YYYY-MM-DDHH:mm:ss').format('YYYY-MM-DD HH:mm') : moment().format('YYYY-MM-DD HH:mm'));
+            const description = '收费单: ' + (payListInfo.clinicTime ? moment(payListInfo.clinicTime, 'YYYY-MM-DDHH:mm:ss').tz('Asia/Shanghai').format('YYYY-MM-DD HH:mm') : moment().tz('Asia/Shanghai').format('YYYY-MM-DD HH:mm'));
             let resOutpatientFee = await app.repository.OutpatientFee.findOne({ where: { feeId: payListInfo.clinicSeq } });
             if (resOutpatientFee) {
               await resOutpatientFee.update({
@@ -298,7 +298,7 @@ module.exports = app => {
         res.feeInfo = res.feeInfo ? res.feeInfo instanceof Array ? res.feeInfo : [ res.feeInfo ] : [];
         const orderId = 'wired' + (new Date()).getTime() % 10000000000 + Math.floor(Math.random() * 10);
         if (payListInfo.clinicSeq) {
-          const description = '收费单: ' + (payListInfo.clinicTime ? moment(payListInfo.clinicTime, 'YYYY-MM-DDHH:mm:ss').format('YYYY-MM-DD HH:mm') : moment().format('YYYY-MM-DD HH:mm'));
+          const description = '收费单: ' + (payListInfo.clinicTime ? moment(payListInfo.clinicTime, 'YYYY-MM-DDHH:mm:ss').tz('Asia/Shanghai').format('YYYY-MM-DD HH:mm') : moment().tz('Asia/Shanghai').format('YYYY-MM-DD HH:mm'));
           let resOutpatientFee = await app.repository.OutpatientFee.findOne({ where: { feeId: payListInfo.clinicSeq } });
           if (resOutpatientFee) {
             // create relative medical record.

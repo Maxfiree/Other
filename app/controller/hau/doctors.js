@@ -14,7 +14,7 @@ module.exports = app => {
       if (VInfo.error) {
         throw createError(400, VInfo.error, { code: 1001 });
       }
-      const doctorList = await app.repository.Doctor.findAll(app.config.datasource.KingdeeCommon.hospitalId);
+      const doctorList = await app.repository.Doctor.findAll();
       this.success(doctorList);
     }
 
@@ -29,7 +29,7 @@ module.exports = app => {
         throw createError(400, VInfo.error, { code: 1001 });
       }
       const data = VInfo.value;
-      const doctor = await app.repository.Doctor.findById(app.config.datasource.KingdeeCommon.hospitalId, data.octorId, data.deptId);
+      const doctor = await app.repository.Doctor.findById(data.doctorId, data.deptId);
       if (doctor) {
         const scheduleInfos = await doctor.getScheduleInfos();
         return this.success(scheduleInfos);
