@@ -2,12 +2,6 @@ module.exports = app => {
   const { STRING, INTEGER } = app.Sequelize;
 
   const PatientGroup = app.model.define('patientGroup', { // 模型json结构
-    hospitalId: {
-      type: STRING(36),
-      allowNull: true,
-      unique: false,
-      comment: '医院代码',
-    },
     masterId: {
       type: INTEGER,
       allowNull: true,

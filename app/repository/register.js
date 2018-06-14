@@ -40,7 +40,7 @@ module.exports = app => {
     }
 
     async getPatient() {
-      return await app.repository.Patient.findOne({ where: { patientId: this.patientId } });
+      return await app.repository.Patient.findOne({ where: { id: this.patientId } });
     }
     async getOrder() {
       return await app.repository.Order.findOne({ where: { orderId: this.orderId } });
@@ -52,11 +52,12 @@ module.exports = app => {
      * @return {Register} 操作成功返回Register
      */
     async confirmRegister() {
+      const hospitalId = app.config.datasource.KingdeeCommon.hospitalId;
       const register = this;
       const patient = await this.getPatient();
       if (register.regType === 1) {
         const data = {
-          hospitalId: patient.hospitalId,
+          hospitalId,
           lockId: register.orderId,
           orderId: register.orderId,
           userJKK: patient.healthCardNo,

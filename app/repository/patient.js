@@ -36,8 +36,7 @@ module.exports = app => {
           let patient = await app.repository.Patient.findOne({ where: { healthCardNo: hisPatient.userJKK } });
           if (patient) {
             await patient.update({
-              hospitalId,
-              patientId: hisPatient.patId,
+              hospitalId: hisPatient.patId,
               patientName: hisPatient.userName,
               healthCardNo: hisPatient.userJKK,
               idCardNo: hisPatient.userIdCard,
@@ -49,8 +48,7 @@ module.exports = app => {
             });
           } else {
             patient = await app.repository.Patient.create({
-              hospitalId,
-              patientId: hisPatient.patId,
+              hospitalId: hisPatient.patId,
               patientName: hisPatient.userName,
               healthCardNo: hisPatient.userJKK,
               idCardNo: hisPatient.userIdCard,
@@ -205,6 +203,7 @@ module.exports = app => {
      * @return {Array} 诊间费用
      */
     async getOutpatientFees(status, startDate, endDate) {
+      const hospitalId = app.config.datasource.KingdeeCommon.hospitalId;
       const patient = this;
       if (!startDate) {
         startDate = moment().subtract(10, 'day').tz('Asia/Shanghai').format('YYYY-MM-DD');
@@ -212,7 +211,7 @@ module.exports = app => {
       }
       const outpatientFees = [];
       if (parseInt(status) === 2) {
-        const res = await connector.request('outpatient.getCompletedPayInfo', { hospitalId: patient.hospitalId, healthCardNo: patient.healthCardNo,
+        const res = await connector.request('outpatient.getCompletedPayInfo', { hospitalId, healthCardNo: patient.healthCardNo,
           patientId: patient.patientId, startDate, endDate });
         const payListInfoList = res.payListInfo ? res.payListInfo instanceof Array ? res.payListInfo : [ res.payListInfo ] : [];
         const promises = payListInfoList.map(async payListInfo => {
@@ -289,11 +288,11 @@ module.exports = app => {
         await Promise.all(promises);
         return outpatientFees;
       }
-      const res = await connector.request('outpatient.getPayInfo', { hospitalId: patient.hospitalId, healthCardNo: patient.healthCardNo,
+      const res = await connector.request('outpatient.getPayInfo', { hospitalId, healthCardNo: patient.healthCardNo,
         patientId: patient.patientId, startDate, endDate });
       const payListInfoList = res.payListInfo ? res.payListInfo instanceof Array ? res.payListInfo : [ res.payListInfo ] : [];
       const promises = payListInfoList.map(async payListInfo => {
-        const res = await connector.request('outpatient.getPaybillfee', { hospitalId: patient.hospitalId, healthCardNo: patient.healthCardNo,
+        const res = await connector.request('outpatient.getPaybillfee', { hospitalId, healthCardNo: patient.healthCardNo,
           patientId: patient.patientId, clinicSeq: payListInfo.clinicSeq, doctorId: payListInfo.doctorId });
         res.feeInfo = res.feeInfo ? res.feeInfo instanceof Array ? res.feeInfo : [ res.feeInfo ] : [];
         const orderId = 'wired' + (new Date()).getTime() % 10000000000 + Math.floor(Math.random() * 10);

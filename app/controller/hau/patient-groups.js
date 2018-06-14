@@ -45,7 +45,6 @@ module.exports = app => {
     async create() {
       const Joi = app.Joi;
       const schema = Joi.object().keys({
-        hospitalId: Joi.string().min(1).max(36),
         name: Joi.string().max(36),
         status: Joi.number().integer(),
         description: Joi.string().max(100),
@@ -64,7 +63,6 @@ module.exports = app => {
       const Joi = app.Joi;
       const schema = Joi.object().keys({
         id: Joi.number().required(),
-        hospitalId: Joi.string().min(1).max(36),
         name: Joi.string().max(36),
         status: Joi.number().integer(),
         description: Joi.string().max(100),

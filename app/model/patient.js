@@ -6,7 +6,7 @@ module.exports = app => {
       type: STRING(36),
       allowNull: true,
       unique: false,
-      comment: '医院代码',
+      comment: '医院his代码',
     },
     patientGroupId: {
       type: INTEGER,

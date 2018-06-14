@@ -63,7 +63,7 @@ module.exports = app => {
           scheduleId: scheduleInfo.scheduleId,
           regFee: scheduleInfo.regFee,
           treatFee: scheduleInfo.treatFee,
-          patientId: patient.patientId,
+          patientId: patient.id,
           status: 2,
         }, { transaction: t });
         if (payType === 5) { // 预支付
