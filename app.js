@@ -1,3 +1,4 @@
+const R = require('ramda');
 module.exports = app => {
   /**
    * 自定义controller
