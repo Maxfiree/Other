@@ -14,7 +14,10 @@ module.exports = app => {
       }
       if (data.rows) {
         if (data.rows instanceof Array) {
-          data.rows = data.rows.map(r => R.omit([ 'created_at', 'updated_at' ], r));
+          data.rows = data.rows.map(r => {
+            if (r.toJSON) { r = r.toJSON(); }
+            return R.omit([ 'created_at', 'updated_at' ], r);
+          });
         }
       } else {
         data = R.omit([ 'created_at', 'updated_at' ], data);
