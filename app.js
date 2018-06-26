@@ -9,10 +9,10 @@ module.exports = app => {
      * @param {string} data 返回数据
      */
     success(data) {
-      if (data.toJSON) { // a sequelize instance
+      if (data && data.toJSON) { // a sequelize instance
         data = data.toJSON();
       }
-      if (data.rows) {
+      if (data && data.rows) {
         if (data.rows instanceof Array) {
           data.rows = data.rows.map(r => {
             if (r.toJSON) { r = r.toJSON(); }
