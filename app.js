@@ -1,3 +1,4 @@
+const R = require('ramda');
 module.exports = app => {
   /**
    * 自定义controller
@@ -8,6 +9,19 @@ module.exports = app => {
      * @param {string} data 返回数据
      */
     success(data) {
+      if (data && data.toJSON) { // a sequelize instance
+        data = data.toJSON();
+      }
+      if (data && data.rows) {
+        if (data.rows instanceof Array) {
+          data.rows = data.rows.map(r => {
+            if (r.toJSON) { r = r.toJSON(); }
+            return R.omit([ 'created_at', 'updated_at' ], r);
+          });
+        }
+      } else {
+        data = R.omit([ 'created_at', 'updated_at' ], data);
+      }
       this.ctx.body = {
         error: 0,
         data,
@@ -44,27 +58,6 @@ module.exports = app => {
   app.Controller = CustomController;
   app.beforeStart(async function() {
     // 应用会等待这个函数执行完成才启动
-    if (app.plugins.passportBearer) {
-      app.passport.verify(async function(ctx, accessToken) {
-        const user = await app.cache.get(`userToken_${accessToken}`, async () => {
-          let res = await ctx.repository.User.findOne({
-            include: [{
-              model: ctx.repository.UserGroup,
-            }],
-            where: { accessToken },
-          });
-          if (res) {
-            res = res.toJSON();
-            res.userGroupIds = res.UserGroups.map(userGroup => userGroup.id);
-          }
-          return ctx.helper.infoFilter(res);
-        });
-        if (!user || ((new Date()).getTime() > user.expireTime)) {
-          return false;
-        }
-        return user;
-      });
-    }
   });
   app.logger.info('[Framework Middleware]', '' + app.config.coreMiddleware);
   app.logger.info('[App Middleware]', '' + app.config.appMiddleware);
