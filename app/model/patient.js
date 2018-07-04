@@ -29,7 +29,7 @@ module.exports = app => {
     idCardNo: {
       type: STRING(18),
       allowNull: true,
-      unique: true,
+      unique: false,
       comment: '身份证号',
     },
     medicareCardNo: {
