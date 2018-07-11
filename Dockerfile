@@ -1,4 +1,4 @@
-FROM ccr.ccs.tencentyun.com/wiredmed-research/nodejs:8.11.1
+FROM ccr.ccs.tencentyun.com/wiredmed-research/nodejs:8.11.3
 LABEL maintainer="relzhong@wiredmed.com"
 
 RUN apt install vim wget libXext* libXrender* -y
