@@ -22,5 +22,28 @@ module.exports = app => {
       },
     };
   }
+  
+  exports.servicesInfo = {
+    hau: {
+      host: 'WIREDPAY_HAU',
+      port: 7001,
+    },
+    iu: {
+      host: 'WIREDPAY_IU',
+      port: 7001,
+    },
+    pu: {
+      host: 'WIREDPAY_PU',
+      port: 7001,
+    },
+    ku: {
+      host: 'WIREDPAY_KU',
+      port: 7001,
+    },
+    gateway: {
+      host: 'WIREDPAY_SERVICE',
+      port: 7001,
+    },
+  };
   return exports;
 };
