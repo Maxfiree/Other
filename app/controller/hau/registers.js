@@ -50,7 +50,7 @@ module.exports = app => {
     async confirm() {
       const Joi = app.Joi;
       const schema = Joi.object().keys({
-        id: Joi.string().required(),
+        id: Joi.number().integer().required(),
       });
       const VInfo = this.ctx.validate(schema);
       if (VInfo.error) {

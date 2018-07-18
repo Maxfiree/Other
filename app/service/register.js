@@ -34,7 +34,7 @@ module.exports = app => {
       const requestParameter = {
         lockId: orderId,
         hospitalId: app.config.datasource.KingdeeCommon.hospitalId,
-        deptId: doctor.deptId,
+        deptId: scheduleInfo.clinicUnitId,
         doctorId: doctor.doctorId,
         regDate: scheduleInfo.scheduleDate,
         timeFlag: scheduleInfo.shiftCode,
@@ -47,6 +47,7 @@ module.exports = app => {
         regFee: scheduleInfo.regFee,
         treatFee: scheduleInfo.treatFee,
       };
+      console.log(requestParameter);
       // 创建his订单
       const res = await connector.request('lockRegToday', requestParameter);
       if (parseInt(res.resultCode) !== 0) throw Error('创建失败');
@@ -56,7 +57,7 @@ module.exports = app => {
         const register = await app.repository.Register.create({
           regId: orderId,
           orderId,
-          deptId: doctor.deptId,
+          deptId: scheduleInfo.clinicUnitId,
           deptName: doctor.deptName,
           doctorId: doctor.doctorId,
           doctorName: doctor.doctorName,

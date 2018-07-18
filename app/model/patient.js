@@ -106,10 +106,6 @@ module.exports = app => {
     indexes: [
       {
         unique: true,
-        fields: [ 'idCardNo' ],
-      },
-      {
-        unique: true,
         fields: [ 'healthCardNo' ],
       },
     ],
