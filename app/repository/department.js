@@ -56,12 +56,13 @@ module.exports = app => {
       const hospitalId = app.config.datasource.KingdeeCommon.hospitalId;
       const res = await connector.request('getDeptInfo', { hospitalId });
       const deptList = res.deptInfo ? res.deptInfo instanceof Array ? res.deptInfo : [ res.deptInfo ] : [];
-      return deptList.map(dept => {
+      const departments = deptList.map(dept => {
         const department = new Department(dept.deptId, dept.deptName, dept.deptType, dept.parentId, '', '', dept.description);
         department._raw = dept;
         department._raw.hospitalId = hospitalId;
         return department;
       });
+      return { count: departments.length, rows: departments };
     }
 
     /**
@@ -91,7 +92,8 @@ module.exports = app => {
         }
         return resDoctor;
       });
-      return await Promise.all(promises);
+      const doctors = await Promise.all(promises);
+      return { count: doctors.length, rows: doctors };
       // return doctorList;
     }
   }

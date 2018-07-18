@@ -149,8 +149,7 @@ module.exports = app => {
         }
       }
       resScheduleIdList = R.uniq(resScheduleIdList);
-      const resScheduleInfoList = await app.repository.ScheduleInfo.findAll({ where: { scheduleId: resScheduleIdList } });
-      if (!resScheduleInfoList) return [];
+      const resScheduleInfoList = await app.repository.ScheduleInfo.findAndCountAll({ where: { scheduleId: resScheduleIdList } });
       return resScheduleInfoList;
     }
   }

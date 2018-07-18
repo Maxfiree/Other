@@ -60,13 +60,13 @@ module.exports = app => {
         idCard: Joi.string().min(15).max(18),
         oppatNo: Joi.string().max(36),
         admissionNo: Joi.string().max(36),
-        sex: Joi.number().integer(),
+        sex: Joi.number().integer().required(),
         type: Joi.number().integer(),
         age: Joi.number().integer(),
         address: Joi.string().max(255),
-        birthDay: Joi.date(),
+        birthday: Joi.date().iso().required(),
         status: Joi.number().integer(),
-        description: Joi.string().max(100),
+        description: Joi.string().max(100).empty(''),
       });
       const VInfo = this.ctx.validate(schema);
       if (VInfo.error) {
@@ -95,7 +95,7 @@ module.exports = app => {
         type: Joi.number().integer(),
         age: Joi.number().integer(),
         address: Joi.string().max(255),
-        birthDay: Joi.date(),
+        birthday: Joi.date(),
         status: Joi.number().integer(),
         description: Joi.string().max(100),
       });

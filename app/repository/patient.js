@@ -1,6 +1,8 @@
 /** @module repository/Patient */
 const R = require('ramda');
 const moment = require('moment-timezone');
+const createError = require('http-errors');
+
 module.exports = app => {
   const connector = app.datasource.kingdeeCommon;
   /**
@@ -62,7 +64,20 @@ module.exports = app => {
           return { count: 1, rows: [ patient ] };
         }
       }
-      return { count: 0 };
+      return { count: 0, rows: [] };
+    }
+
+    static async create(data) {
+      const res = await connector.request('createNewPatient', {
+        idCardNo: data.idCardNo,
+        patientName: data.patientName,
+        gender: data.sex === 1 ? 'M' : 'F',
+        healthCardNo: data.healthCardNo,
+        phone: data.phone,
+        birthday: moment(data.birthday).format('YYYY-MM-DD'),
+        remark: data.description,
+      });
+      if (!parseInt(res.resultCode)) { throw createError(403, 'create fail', { code: 1007 }); }
     }
 
     /**
