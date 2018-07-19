@@ -1,6 +1,7 @@
 const js2xmlparser = require('js2xmlparser');
 const xml2js = require('xml2js');
 const soap = require('strong-soap').soap;
+const R = require('ramda');
 
 module.exports = app => {
   class KingdeeCommon {
@@ -39,6 +40,7 @@ module.exports = app => {
     }
 
     async request(path, data) {
+      data = R.filter(R.complement(R.isNil), data);
       const req = js2xmlparser.parse('req', data, { declaration: { encoding: 'utf-8' }, format: { doubleQuotes: true } });
       const client = await this.prepareClient();
       try {
