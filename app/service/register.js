@@ -47,7 +47,6 @@ module.exports = app => {
         regFee: scheduleInfo.regFee,
         treatFee: scheduleInfo.treatFee,
       };
-      console.log(requestParameter);
       // 创建his订单
       const res = await connector.request('lockRegToday', requestParameter);
       if (parseInt(res.resultCode) !== 0) throw Error('创建失败');
