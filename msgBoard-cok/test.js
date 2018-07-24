@@ -8,6 +8,7 @@ var times = 1;
 function serverHandle(request, response) {
   // 解析请求，包括文件名
   console.log("\n" + times + " times request")
+  console.log("full-url is: "+request.url);
   var pathname = url.parse(request.url).pathname;
   var position = pathname.lastIndexOf(".");
   var textType = pathname.substr(position + 1);

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link type="text/css" rel="stylesheet" href="public/sty.css" />
+    <meta charset="utf-8">
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <title>登陆界面</title>
+    <script>
+        $(function () {
+            $("#login").click(loginSignUP)
+            $("#build").click(loginSignUP)
+        });
+
+        function loginSignUP(event) {
+            if ($("#user").val().length == 0) {
+                return alert("请输入内容!");
+            }
+            if ($("#password").val().length == 0) {
+                return alert("请输入密码!");
+            }
+            document.cookie="username="+encodeURI($("#user").val())+"&password="+$("#password").val();
+           // document.cookie="username="+encodeURI($("#user").val())+";"+"password="+$("#password").val();
+            $.ajax({
+                url: "test.js",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    action: event.target.id,
+                    username: $("#user").val(),
+                    password: $("#password").val()
+                },
+                timeout: 2000,
+                success: function (data) {
+                    if (data.status == "登陆成功") {
+                        console.log(data);
+                        //注册成功页面跳转，
+                        window.location.href="./html/main.html";
+                    }
+                    else
+                        alert(data.status);
+                },
+                error: function (err) {
+                    alert("连接失败");
+                }
+            })
+
+        }
+    </script>
+</head>
+
+<body class="indexback">
+    <div class="sign_in">
+            <h1>留言板</h1>
+            <br/> 账号：
+            <input type="text" id="user" />
+            <br/> 密码：
+            <input type="password" id="password" />
+            <br/>
+        <br/> &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+        <input type="button" value="登陆" id="login" />
+        <input type="button" value="注册" id="build" />
+    </div>
+</body>
+</html
