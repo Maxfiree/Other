@@ -1,0 +1,35 @@
+.sign_in {
+      left: 800px;
+      top: 300px;
+      position: absolute;
+      background-image: url("ku.jpg");
+      background-repeat:no-repeat;
+       background-size:100% 100%;-moz-background-size:100% 100%;
+}
+
+.inputarea {
+      left: 600px;
+      top: 700px;
+      position: absolute;
+}
+
+.displayarea {
+      left: 600px;
+      top: 50px;
+      position: absolute;
+      border: medium double rgb(0, 195, 255);
+      height: 600px;
+      width: 650px;
+      overflow-y: scroll;
+      white-space:normal;
+      word-break:break-all;
+      word-wrap:break-word;
+      background-image: url("context.jpg");
+      background-repeat:no-repeat;
+      background-size:100% 100%;-moz-background-size:100% 100%;
+}
+
+.indexback {
+      background-image: url("flowers.jpg");
+}
+

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <link type="text/css" rel="stylesheet" href="../public/sty.css" />
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <script>
+    </script>
+    <title>留言板</title>
+</head>
+
+<body class="indexback">
+    <script>
+        var cook=document.cookie;
+        console.log("cookie is: "+document.cookie)
+        cook=decodeURI(cook);
+        console.log("the decoded cookie is:"+cook);
+        var start=cook.indexOf("username");
+        cook=cook.substr(start);
+        var start2=cook.indexOf("=")+1;
+        end=cook.indexOf("&");
+        var username=cook.substring(start2,end);
+        console.log("the username is:"+username);
+         //载入留言信息
+        function init() {
+            $("#user").html(username);
+            $(function () {
+                $("#send").click(upload)
+            });
+            $.ajax({
+                url: "../test.js",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    action: "load",
+                },
+                timeout: 2000,
+                success: function (data) {
+                    console.log(data);
+                    $("#displaybox").html(data.status);
+                },
+                error: function (err) {
+                    alert("连接失败");
+                }
+            })
+
+        }
+
+        //提交留言信息
+        function upload() {
+            if ($("#inputbox").val().length == 0) {
+                return alert("请输入内容!");
+            }
+            $.ajax({
+                url: "../test.js",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    action: "upload",
+                    username: username,
+                    cont: $("#inputbox").val()
+                },
+                timeout: 2000,
+                success: function (data) {
+                       // alert(data.status);
+                        location.reload();
+                },
+                error: function (err) {
+                    alert("连接失败");
+                }
+            })
+        }
+        $(document).ready(init);
+    </script>
+    <div class="displayarea" id="displaybox">
+   
+    </div>
+    <div class="inputarea">
+        <h3>在这里输入留言内容&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;亲爱的：
+            <b id="user">用户</b>
+        </h3>
+        <textarea name="txt" id="inputbox" cols="80" rows="5" warp="hard" maxlength="200" style="font-size:15px"></textarea>
+        <br/>
+        <br/>
+        <input id="send" type="button" value="提交" style="width:100px;height:50px;margin-left:500px" />
+    </div>
+</body>
+</html
