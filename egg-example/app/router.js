@@ -5,5 +5,6 @@
  */
 module.exports = app => {
   const { router, controller } = app;
-  router.get('/home', app.controller.home.else);
+  router.get('/home', '/login',app.middlewares.onemid.upper,app.controller.home.else);
 };
+
