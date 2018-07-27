@@ -5,6 +5,7 @@ module.exports = appInfo => {
     security: {
       csrf: false
     },
+    
   };
 
   // use for cookie sign key, should change to your own and keep security
