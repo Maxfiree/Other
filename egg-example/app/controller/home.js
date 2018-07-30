@@ -5,7 +5,8 @@ var fs= require("fs");
 const Controller = require('egg').Controller;
 
 class HomeController extends Controller {
-  async else() {
+  async index() {
+    this.main();
     const { ctx,app }=this;
     const { req, res }=ctx;
     console.log("\n\nOK");
@@ -17,7 +18,19 @@ class HomeController extends Controller {
       console.log(ctx.get('content-type'));
       var cok=ctx.headers.cookie;
       console.log(cok);
+      await console.log("index");
+      ctx.service.fun.find();
+      ctx.service.fun.find2();
+      console.log("index await");
+  }
 
+  async main() {
+    const { ctx,app }=this;
+    const { req, res }=ctx;
+      await console.log("main");
+      ctx.service.fun.find();
+      ctx.service.fun.find2();
+      console.log("main await");
   }
 }
 

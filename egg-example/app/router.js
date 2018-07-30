@@ -3,8 +3,8 @@
 /**
  * @param {Egg.Application} app - egg application
  */
-module.exports = app => {
+module.exports = (app) => {
   const { router, controller } = app;
-  router.post('/home', '/login',app.controller.home.else);
+  router.post('/home', '/login',app.middleware.onemid.upper,controller.home.index);
 };
 

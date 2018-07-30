@@ -1,4 +1,7 @@
 exports.upper = async function(ctx, next) {
-  ctx.query.name = ctx.query.name.toUpperCase();
+  ctx.request.body.name=ctx.request.body.name.toUpperCase();
+  console.log("middle");
     await next();
+    console.log(ctx.request.body.name);
+    console.log("await middle");
   };
