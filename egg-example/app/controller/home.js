@@ -6,7 +6,6 @@ const Controller = require('egg').Controller;
 
 class HomeController extends Controller {
   async index() {
-    this.main();
     const { ctx,app }=this;
     const { req, res }=ctx;
     console.log("\n\nOK");
