@@ -5,6 +5,7 @@
  */
 module.exports = (app) => {
   const { router, controller } = app;
-  router.post('/home', '/login',app.middleware.onemid.upper,controller.home.index);
+  router.resources('home', '/api/home',controller.home);
+  // router.get( '/api/home/:id',controller.home.new);
 };
 
